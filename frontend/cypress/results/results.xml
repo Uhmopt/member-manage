@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="11.5070" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2022-06-21T01:50:10" tests="0" file="cypress\e2e\records-list\records-list.cy.tsx" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="Records List" timestamp="2022-06-21T01:50:11" tests="2" time="11.5070" failures="0">
+    <testcase name="Records List Navigate to Records Page for Patients" time="11.4520" classname="Navigate to Records Page for Patients">
+    </testcase>
+    <testcase name="Records List Confirm records loaded in the Records List" time="0.0550" classname="Confirm records loaded in the Records List">
+    </testcase>
+  </testsuite>
+</testsuites>

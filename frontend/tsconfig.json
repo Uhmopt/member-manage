@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "outDir": "./dist/",
+    "baseUrl": "src",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -8,13 +10,16 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "isolatedModules": false,
+    "jsx": "react-jsx",
+    "types": ["@types/jest", "cypress", "node"],
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true
   },
-  "include": ["src"]
+  "include": ["src/*", "**/*.ts", "**/*.tsx"],
+  "exclude": ["typings"]
 }
+
