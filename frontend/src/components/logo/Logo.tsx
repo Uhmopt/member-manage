@@ -2,8 +2,10 @@ import { Box, Typography } from "@mui/material";
 
 const Logo = () => {
 	return (
-		<Box sx={{cursor: 'pointer'}}>
-			<Typography variant='h2' color="primary">RB Members</Typography>
+		<Box sx={{ cursor: "pointer" }}>
+			<Typography variant="h3" color="primary">
+				RB Members
+			</Typography>
 		</Box>
 	);
 };

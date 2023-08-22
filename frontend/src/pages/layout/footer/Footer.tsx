@@ -1,7 +1,11 @@
-import React from "react";
+import { InputLabel, Paper } from "@mui/material";
 
 const Footer = () => {
-	return <div>Footer</div>;
+	return (
+		<Paper>
+			<InputLabel>RB 2023 &copy;</InputLabel>
+		</Paper>
+	);
 };
 
 export default Footer;

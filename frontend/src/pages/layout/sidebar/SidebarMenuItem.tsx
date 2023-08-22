@@ -5,16 +5,26 @@ import { FC, PropsWithChildren, useMemo, useState } from "react";
 import { UIMenuData } from "types/ui-base-types";
 import SidebarMenu from "./SidebarMenu";
 
-const SidebarMenuItem: FC<PropsWithChildren<{ data?: UIMenuData; isActive?: boolean }>> = ({
+const SidebarMenuItem: FC<PropsWithChildren<{ data?: UIMenuData; isActive?: boolean; onClick?: (p: UIMenuData) => void }>> = ({
 	data = {} as UIMenuData,
 	isActive: propsIsActive = false,
+	onClick = () => null,
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const isActive = useMemo(() => propsIsActive || isOpen, [propsIsActive, isOpen]);
 	const hasSub = useMemo(() => !!data?.data?.length, [data?.data?.length]);
 
 	const handleToggle = () => {
-		setIsOpen((s = false) => !s);
+		if (hasSub) {
+			setIsOpen((s = false) => !s);
+		} else {
+			onClick(data);
+		}
+	};
+
+	const handleClick = (value: UIMenuData) => {
+		value.parent = data;
+		onClick(value);
 	};
 
 	return (
@@ -47,7 +57,7 @@ const SidebarMenuItem: FC<PropsWithChildren<{ data?: UIMenuData; isActive?: bool
 			{hasSub ? (
 				<Collapse in={isOpen}>
 					<Box sx={{ ml: 1 }}>
-						<SidebarMenu data={data?.data} />
+						<SidebarMenu data={data?.data} onClick={handleClick} />
 					</Box>
 				</Collapse>
 			) : null}

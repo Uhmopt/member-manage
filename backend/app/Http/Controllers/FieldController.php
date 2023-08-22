@@ -17,13 +17,13 @@ class FieldController extends ApiController
     public function index(Request $request)
     {
         // Get user from $request token.
-        if (
-            !($user = auth()
-                ->setRequest($request)
-                ->user())
-        ) {
-            return $this->responseUnauthorized();
-        }
+        // if (
+        //     !($user = auth()
+        //         ->setRequest($request)
+        //         ->user())
+        // ) {
+        //     return $this->responseUnauthorized();
+        // }
 
 
         $collection = Field::orderBy('id', 'DESC');
@@ -53,13 +53,13 @@ class FieldController extends ApiController
     public function store(Request $request)
     {
         // Get user from $request token.
-        if (
-            !($user = auth()
-                ->setRequest($request)
-                ->user())
-        ) {
-            return $this->responseUnauthorized();
-        }
+        // if (
+        //     !($user = auth()
+        //         ->setRequest($request)
+        //         ->user())
+        // ) {
+        //     return $this->responseUnauthorized();
+        // }
         $data = $request->input('data');
         $row = new Field();
         $row->fill($data);
@@ -77,13 +77,13 @@ class FieldController extends ApiController
     public function batchStore(Request $request)
     {
         // Get user from $request token.
-        if (
-            !($user = auth()
-                ->setRequest($request)
-                ->user())
-        ) {
-            return $this->responseUnauthorized();
-        }
+        // if (
+        //     !($user = auth()
+        //         ->setRequest($request)
+        //         ->user())
+        // ) {
+        //     return $this->responseUnauthorized();
+        // }
         $data = $request->input('data');
         $file_info = $request->input('file_info');
 
@@ -123,13 +123,13 @@ class FieldController extends ApiController
      */
     public function show(Request $request, $id)
     {
-        if (
-            !($user = auth()
-                ->setRequest($request)
-                ->user())
-        ) {
-            return $this->responseUnauthorized();
-        }
+        // if (
+        //     !($user = auth()
+        //         ->setRequest($request)
+        //         ->user())
+        // ) {
+        //     return $this->responseUnauthorized();
+        // }
 
         $collection = Field::where([
             'id' => $id,
@@ -159,13 +159,13 @@ class FieldController extends ApiController
     public function update(Request $request, $id)
     {
         // Get user from $request token.
-        if (
-            !($user = auth()
-                ->setRequest($request)
-                ->user())
-        ) {
-            return $this->responseUnauthorized();
-        }
+        // if (
+        //     !($user = auth()
+        //         ->setRequest($request)
+        //         ->user())
+        // ) {
+        //     return $this->responseUnauthorized();
+        // }
         $data = $request->input('data');
 
         $row = Field::where(['id' => $id])->first();
@@ -189,13 +189,13 @@ class FieldController extends ApiController
     public function destroy(Request $request, $id)
     {
         // Get user from $request token.
-        if (
-            !($user = auth()
-                ->setRequest($request)
-                ->user())
-        ) {
-            return $this->responseUnauthorized();
-        }
+        // if (
+        //     !($user = auth()
+        //         ->setRequest($request)
+        //         ->user())
+        // ) {
+        //     return $this->responseUnauthorized();
+        // }
 
         $ret = Field::where([['id', '=', $id]])->delete();
 

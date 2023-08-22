@@ -31,3 +31,11 @@ body {
   font-family: 'Futura Bk BT';
   color: #6d6e71;
 }
+
+.h-full {
+  height: 100%;
+}
+
+.w-full {
+  width: 100%;
+}

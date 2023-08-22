@@ -1,6 +1,5 @@
 import { Box, Grid, Stack } from "@mui/material";
 import ScrollContainer from "components/containers/ScrollContainer";
-import { UserProvider } from "context/UserContext";
 import { FC, PropsWithChildren } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./footer";
@@ -20,9 +19,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
 					</Grid>
 					<Grid item flexGrow={1}>
 						<ScrollContainer>
-							<Box sx={{ pt: 4, px: 3 }}>
-								<UserProvider relations={["ClientDetail.Service"]}>{bodyContent}</UserProvider>
-							</Box>
+							<Box sx={{ pt: 4, px: 3, height: "100%" }}>{bodyContent}</Box>
 						</ScrollContainer>
 					</Grid>
 				</Grid>
