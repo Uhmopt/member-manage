@@ -1,11 +1,11 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Grid, Paper, Stack, Typography } from "@mui/material";
 import { APIResponseCode } from "api/apiResponse";
 import tableService from "api/table/table.service";
 import { ITable } from "api/table/table.types";
 import LoaderContainer from "components/loading/LoaderContainer";
 import { useSnackbar } from "notistack";
+import FieldsList from "pages/fields/fields-list";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
 
 const TableEditFormManage: FC<PropsWithChildren<{ table_id?: number }>> = ({ table_id = 0 }) => {
 	const { enqueueSnackbar } = useSnackbar();
@@ -33,8 +33,17 @@ const TableEditFormManage: FC<PropsWithChildren<{ table_id?: number }>> = ({ tab
 	return (
 		<LoaderContainer open={isLoading} style={{ height: "100%" }}>
 			<Stack sx={{ height: "100%" }}>
-				<Typography>{data?.displayName ?? ""}</Typography>
-				<Box sx={{ flexGrow: 1 }}>{data?.id === table_id ? <Outlet /> : null}</Box>
+				<Typography fontWeight={700}>{data?.display_name ?? ""}</Typography>
+				<Paper elevation={0} sx={{ flexGrow: 1 }}>
+					{data?.id === table_id ? (
+						<Grid container sx={{ height: "100%" }} alignItems="stretch">
+							<Grid item lg={6} md={6} sm={6} xs={6}>
+								<FieldsList table_id={table_id} />
+							</Grid>
+							<Grid item lg={6} md={6} sm={6} xs={6}></Grid>
+						</Grid>
+					) : null}
+				</Paper>
 			</Stack>
 		</LoaderContainer>
 	);

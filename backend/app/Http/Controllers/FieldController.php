@@ -25,9 +25,13 @@ class FieldController extends ApiController
         //     return $this->responseUnauthorized();
         // }
 
+        $table_id = $request->input('table_id');
 
         $collection = Field::orderBy('id', 'DESC');
 
+        if ($table_id) {
+            $collection = $collection->where(['table_id' => $table_id]);
+        }
 
         $collection = $collection->get();
 

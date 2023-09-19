@@ -17,6 +17,7 @@ class CreateFieldsTable extends Migration
             $table->id();
             $table->timestamps();
 
+            $table->bigInteger('table_id')->nullable();
             $table->json('data')->nullable();
         });
     }

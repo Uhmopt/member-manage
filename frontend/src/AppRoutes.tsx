@@ -1,4 +1,3 @@
-import FieldsPage from "pages/fields";
 import Layout from "pages/layout";
 import AuthLoginPage from "pages/login/auth-login";
 import NotFoundPage from "pages/misc/NotFoundPage";
@@ -15,7 +14,6 @@ const AppRoutes = () => {
 				<Route path="/" element={<Layout />}>
 					<Route path="tables" element={<TablesPage />} />
 					<Route path="tables/:table_id" element={<TablePage />} />
-					<Route path="fields" element={<FieldsPage />} />
 					{/* fallback 404 page */}
 					<Route path="*" element={<NotFoundPage />} />
 				</Route>

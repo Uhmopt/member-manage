@@ -152,10 +152,9 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 	};
 
 	const handleDbClickRow = (e: RowDoubleClickedEvent<T>) => {
-		navigate("sub-route");
 		if (enableSubRoute) {
 			if (idSelector(e.data)) {
-				navigate(idSelector(e.data));
+				navigate(`${idSelector(e.data)}`);
 			}
 		} else {
 			onDbClickRow(e);
