@@ -32,10 +32,69 @@ body {
   color: #6d6e71;
 }
 
+.p-2 {
+  padding: 0.5rem /* 8px */;
+}
+.p-4 {
+  padding: 1rem /* 16px */;
+}
+
 .h-full {
   height: 100%;
 }
 
 .w-full {
   width: 100%;
+}
+
+.w-74 {
+  width: 18.5rem /* 296px */;
+}
+
+.w-80 {
+  width: 20rem /* 320px */;
+}
+
+.w-82 {
+  width: 20.5rem /* 328px */;
+}
+
+.w-90 {
+  width: 22.5rem /* 360px */;
+}
+
+.w-100 {
+  width: 25rem /* 400px */;
+}
+
+.w-120 {
+  width: 30rem /* 480px */;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.gap-3 {
+  gap: 0.75rem /* 12px */;
 }

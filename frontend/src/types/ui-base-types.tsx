@@ -160,7 +160,9 @@ export interface ActionBarButton {
 	color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
 	type?: "button" | "submit" | "reset" | undefined;
 	disabled?: boolean;
-	additional?: boolean;
+
+	showWhenSelected?: boolean;
+	hideWhenSelected?: boolean;
 
 	isConfirm?: boolean;
 	message?: ReactNode;

@@ -3,7 +3,12 @@ import { Button, Divider, Drawer, Grid, IconButton, Typography, Zoom } from "@mu
 import LoaderContainer from "components/loading/LoaderContainer";
 import { FC, PropsWithChildren, ReactNode } from "react";
 
-export type WidthSize = "medium" | "wide" | "thin";
+export enum WidthSize {
+	XWide = "xwide",
+	Wide = "wide",
+	Medium = "medium",
+	Thin = "thin",
+}
 
 const DrawerContainer: FC<
 	PropsWithChildren<{
@@ -32,7 +37,17 @@ const DrawerContainer: FC<
 	return (
 		<Drawer anchor={anchor} open={open} onClose={() => onClose()}>
 			<LoaderContainer open={isLoading}>
-				<div className={`${widthSize === "wide" ? "w-100" : widthSize === "thin" ? "w-74" : "w-82"} h-screen flex flex-col gap-3 p-4`}>
+				<div
+					className={`${
+						widthSize === WidthSize.XWide
+							? "w-120"
+							: widthSize === WidthSize.Wide
+							? "w-100"
+							: widthSize === WidthSize.Thin
+							? "w-74"
+							: "w-82"
+					} h-screen flex flex-col gap-3 p-4`}
+				>
 					{title ? (
 						<Grid container spacing={1} alignItems="center">
 							<Grid item>

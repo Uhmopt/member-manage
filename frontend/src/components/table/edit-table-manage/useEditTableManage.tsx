@@ -8,12 +8,12 @@ import { PropsWithChildren, useCallback, useEffect, useMemo, useState } from "re
 
 // project imports
 import { RowClickedEvent, RowDoubleClickedEvent } from "ag-grid-community";
+import { APIResponseCode } from "api/apiResponse";
 import { isEmpty } from "lodash";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import { EditTableManageProps, OnSaveNames } from "../types";
-import { APIResponseCode } from "api/apiResponse";
 import { ActionBarButton, ActionBarButtonId, DispatchFunction } from "types/ui-base-types";
+import { EditTableManageProps, OnSaveNames } from "../types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManageProps>) {
@@ -48,8 +48,9 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 
 		isLoading: propsIsLoading = false,
 
+		actionLabeling = true,
 		editIcon = "EditTwoTone",
-		editLabel = `Edit ${title}`,
+		editLabel = actionLabeling ? `Edit ${title}` : `Edit`,
 		deleteTitle = "",
 		deleteMessage = "",
 		disableActions = { add: false, edit: false, delete: false, saveButton: false },
@@ -60,7 +61,7 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
-		idSelector = (p?: T) => p?.Id ?? p?._id ?? "",
+		idSelector = (p?: T) => p?.id ?? p?._id ?? "",
 
 		forceInit = 1,
 
@@ -70,6 +71,8 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 		reloadAfterCloseUpdate = false,
 
 		editOnDbClick = false,
+
+		forceRefreshSelection: propsForceRefreshSelection = 0,
 	} = props;
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
@@ -82,6 +85,7 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 	const [formData, setFormData] = useState<T>();
 	const [isOpen, setIsOpen] = useState(false);
 	const [filter, setFilter] = useState({ search_word: "" });
+	const [forceRefreshSelection, setForceRefreshSelection] = useState(1);
 
 	const openLoading = useMemo(() => isLoading || propsIsLoading, [isLoading, propsIsLoading]);
 
@@ -148,15 +152,19 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 	};
 
 	const handleDbClickRow = (e: RowDoubleClickedEvent<T>) => {
+		navigate("sub-route");
 		if (enableSubRoute) {
-			if (idSelector(e.data)) navigate(idSelector(e.data));
+			if (idSelector(e.data)) {
+				navigate(idSelector(e.data));
+			}
 		} else {
 			onDbClickRow(e);
 		}
 
 		if (editOnDbClick) {
 			setIsOpen(true);
-			setFormData((e?.data ?? {}) as T);
+			onOpenEdit(formatOnEdit((e?.data ?? {}) as T));
+			handleSelectRow((e?.data ?? {}) as T);
 		}
 	};
 
@@ -183,14 +191,14 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 			onOpenEdit(formatOnEdit((formData ?? {}) as T));
 			if (!preventOpenEdit) {
 				setIsOpen(true);
-				setSelectedRows([...selectedRows]);
+				setForceRefreshSelection((s = 1) => s + 1);
 			}
 		}
 	};
 
 	const handleClose = () => {
 		setIsOpen(false);
-		setSelectedRows([...selectedRows]);
+		setForceRefreshSelection((s = 1) => s + 1);
 		if (reloadAfterCloseUpdate && idSelector(formData)) {
 			loadData();
 		}
@@ -207,7 +215,7 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 					const response = await apiService.save({ data: submitData });
 					if (response.code === APIResponseCode.SUCCESS) {
 						const isUpdate = idSelector(submitData) && !(idSelector(submitData) === "new");
-						const inserted = isUpdate ? submitData : { ...submitData, Id: typeof response.data === "string" ? response.data : "" };
+						const inserted = isUpdate ? submitData : { ...submitData, id: typeof response.data === "string" ? response.data : "" };
 
 						if (reloadAfterUpdate) {
 							loadData();
@@ -276,30 +284,32 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 				{
 					id: `${ActionBarButtonId.ADD}_${title?.toString().toUpperCase()}`,
 					icon: "AddTwoTone",
-					title: `Add ${title}`,
+					title: actionLabeling ? `Add ${title}` : `Add`,
 					action: handleAdd,
 					hidden:
 						(typeof disableActions.add === "function" ? disableActions.add((formData ?? {}) as T) : disableActions.add) ||
 						readOnly ||
 						selectedRows.length > 0,
 					order: 1,
+					color: "info",
 				},
 				{
 					id: `${ActionBarButtonId.EDIT}_${title?.toString().toUpperCase()}`,
 					icon: editIcon,
 					title: editLabel,
 					action: handleEdit,
-					additional: true,
+					showWhenSelected: true,
 					hidden:
 						(typeof disableActions.edit === "function" ? disableActions.edit((formData ?? {}) as T) : disableActions.edit) ||
 						readOnly ||
 						selectedRows.length > 1,
 					order: 2,
+					color: "info",
 				},
 				{
 					id: `${ActionBarButtonId.DELETE}_${title?.toString().toUpperCase()}`,
 					icon: "Delete",
-					title: deleteTitle || `Delete ${title}`,
+					title: deleteTitle || actionLabeling ? `Delete ${title}` : `Delete`,
 					message:
 						deleteMessage ||
 						`Are you sure want to permanently delete the "${
@@ -309,7 +319,7 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 						}" ${title}?
 		\nThis deletion will result in deleting all the Fields that user this ${title} and all the data that have been stored in the database for those Fields. Click "Confirm Deletion" to proceed or "Cancel" to go back`,
 					action: handleDelete,
-					additional: true,
+					showWhenSelected: true,
 					isConfirm: true,
 					color: "error",
 					hidden:
@@ -321,9 +331,12 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 		[disableActions, columns, readOnly, selectedRows.length],
 	);
 
-	const actionBarButtons = useMemo(
-		() => [...actionBarDefaultButtons, ...additionalButtons].filter((item) => !item?.hidden && (item?.additional ? isSelected : true)),
-		[actionBarDefaultButtons, additionalButtons, isSelected],
+	const actionBarButtons: Array<ActionBarButton> = useMemo(
+		() =>
+			[...actionBarDefaultButtons, ...additionalButtons].filter(
+				(item) => !item?.hidden && (item?.showWhenSelected ? isSelected : true) && (item?.hideWhenSelected ? !isSelected : true),
+			),
+		[actionBarDefaultButtons, additionalButtons, isSelected, selectedRows.length],
 	);
 
 	// useEffect(() => {
@@ -336,6 +349,12 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 	// 		setActionBarButtons(actionBarButtons);
 	// 	}
 	// }, [JSON.stringify(actionBarButtons)]);
+
+	useEffect(() => {
+		if (propsForceRefreshSelection) {
+			setForceRefreshSelection((s = 1) => s + 1);
+		}
+	}, [propsForceRefreshSelection]);
 
 	useEffect(() => {
 		if (isInitLoad) {
@@ -354,7 +373,8 @@ function useEditTableManage<T = any>(props: PropsWithChildren<EditTableManagePro
 		isExternalActionBar,
 		actionBarButtons,
 		formattedData,
-		// selectedRows,
+		selectedRows,
+		forceRefreshSelection,
 		handleClickRow,
 		handleDbClickRow,
 		handleSelectRow,

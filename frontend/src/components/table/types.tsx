@@ -18,15 +18,16 @@ import { ActionBarButton, DispatchFunction, FormatFunction, StaticField } from "
 export type EditTableProps<T> = PropsWithChildren<{
 	data?: Array<T>;
 	selectedRows?: Array<T | string>;
+	forceRefreshSelection?: number;
 	columns?: Array<ColDef<T> | ColGroupDef<T>>;
 	rowSelection?: "single" | "multiple";
 
 	onClickRow?: (e: RowClickedEvent<T>) => void;
 	onDbClickRow?: (e: RowDoubleClickedEvent<T>) => void;
 	onClickCell?: (e: CellClickedEvent<T>) => void;
-	onSelectRow?: (e: T) => void;
-	onDeSelectRow?: (e: T) => void;
-	onSelectRows?: (e: Array<T>) => void;
+	onSelectRow?: (p: T) => void;
+	onDeSelectRow?: (p: T) => void;
+	onSelectRows?: (p: Array<T>) => void;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getRowStyle?: ((params: RowClassParams<T, any>) => RowStyle | undefined) | undefined;
@@ -114,6 +115,12 @@ export interface EditTableManageProps<T = any> {
 	reloadAfterCloseUpdate?: boolean;
 
 	editOnDbClick?: boolean;
+
+	actionLabeling?: boolean;
+
+	forceRefreshSelection?: number;
+
+	hidePageTitle?: boolean;
 }
 
 export enum OnSaveNames {

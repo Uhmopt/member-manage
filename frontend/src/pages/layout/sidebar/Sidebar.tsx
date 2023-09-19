@@ -24,10 +24,10 @@ const Sidebar = () => {
 				<SidebarMenu
 					data={[
 						{
-							label: "Fields",
-							name: "Fields",
-							path: "/fields",
-							absPath: "/fields",
+							label: "Tables",
+							name: "Tables",
+							path: "/tables",
+							absPath: "/tables",
 							data: [],
 						},
 					]}

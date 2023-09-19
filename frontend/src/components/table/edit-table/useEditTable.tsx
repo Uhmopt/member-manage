@@ -15,6 +15,7 @@ import { EditTableProps } from "../types";
 function useEditTable<T = any>(props: EditTableProps<T>) {
 	const {
 		selectedRows: propsSelectedRows = [],
+		forceRefreshSelection = 1,
 		columns = [],
 
 		onClickRow,
@@ -29,7 +30,7 @@ function useEditTable<T = any>(props: EditTableProps<T>) {
 
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
-		idSelector = (p?: T) => p?.Id ?? p?._id ?? "",
+		idSelector = (p?: T) => p?.id ?? p?._id ?? "",
 	} = props;
 
 	const gridRef = useRef<AgGridReact<T>>(null);
@@ -136,8 +137,10 @@ function useEditTable<T = any>(props: EditTableProps<T>) {
 	};
 
 	useEffect(() => {
-		refreshSelection(selectedRows);
-	}, [selectedRows]);
+		if (forceRefreshSelection) {
+			refreshSelection(selectedRows);
+		}
+	}, [selectedRows, forceRefreshSelection]);
 
 	useEffect(() => {
 		if (propsSelectedRows?.length) {

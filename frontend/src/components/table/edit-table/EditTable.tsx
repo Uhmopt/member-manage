@@ -37,7 +37,7 @@ function EditTable<T = any>(props: EditTableProps<T>, ref?: ForwardedRef<AgGridR
 	useImperativeHandle(ref, () => gridRef.current as AgGridReact<T>, [gridRef.current]);
 
 	return (
-		<Box className="ag-theme-alpine h-full" sx={{ height: "100%" }}>
+		<Box className="ag-theme-alpine h-full" sx={{ height: "90%" }}>
 			<AgGridReact<T>
 				ref={gridRef}
 				defaultColDef={defaultColDef}
